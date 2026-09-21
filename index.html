@@ -10,22 +10,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root{
-    --bg:#F6F2E9; --surface:#FFFFFF; --surface-2:#FBF7EF; --ink:#20261E; --muted:#6E6459;
-    --accent:#3F6659; --accent-ink:#EFF5F1; --line:#E2D9C8; --danger:#B23A3A;
-    --radius:14px;
+    --bg:#F5F1E7; --surface:#FFFFFF; --surface-2:#FBF8F0; --ink:#1C2233; --muted:#767161;
+    --accent:#1C2A45; --accent-ink:#F2EFE6; --line:#E4DCC8; --danger:#B23A3A;
+    --navy:#1C2A45; --navy-ink:#F2EFE6; --coral:#E15B33; --coral-ink:#FFFFFF;
+    --radius:16px;
     box-sizing:border-box;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#171A15; --surface:#20241D; --surface-2:#262B21; --ink:#EFEAE0; --muted:#A79E90;
-      --accent:#7FB39E; --accent-ink:#0F1C16; --line:#333B2E;
+      --bg:#161A22; --surface:#1E2430; --surface-2:#242B39; --ink:#EFEAE0; --muted:#A79E90;
+      --accent:#7C93BF; --accent-ink:#131824; --line:#31394B;
+      --navy:#7C93BF; --navy-ink:#131824; --coral:#F0793F;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#171A15; --surface:#20241D; --surface-2:#262B21; --ink:#EFEAE0; --muted:#A79E90;
-    --accent:#7FB39E; --accent-ink:#0F1C16; --line:#333B2E;
+    --bg:#161A22; --surface:#1E2430; --surface-2:#242B39; --ink:#EFEAE0; --muted:#A79E90;
+    --accent:#7C93BF; --accent-ink:#131824; --line:#31394B;
+    --navy:#7C93BF; --navy-ink:#131824; --coral:#F0793F;
   }
   html{ scroll-padding-top: env(safe-area-inset-top, 0px); height:100%; }
   *{ box-sizing:border-box; }
@@ -38,26 +41,27 @@
 
   header.top{
     position:sticky; top:0; z-index:20; background:var(--bg);
-    padding: calc(env(safe-area-inset-top,0px) + 14px) 16px 10px;
+    padding: calc(env(safe-area-inset-top,0px) + 18px) 16px 12px;
     border-bottom:1px solid var(--line);
   }
   .brand{ display:flex; align-items:center; gap:10px; }
   .brand .mark{
-    width:38px; height:38px; border-radius:10px; background:var(--accent); color:var(--accent-ink);
+    width:40px; height:40px; border-radius:12px; background:var(--navy); color:var(--navy-ink);
     display:flex; align-items:center; justify-content:center; font-size:20px; flex:none;
   }
-  .brand h1{ font-size:19px; font-weight:800; margin:0; }
+  .brand h1{ font-size:20px; font-weight:800; margin:0; letter-spacing:-0.01em; }
   .brand p{ margin:2px 0 0; font-size:12.5px; color:var(--muted); }
 
   nav.tabs{
-    display:flex; gap:6px; padding:12px 16px 0; overflow-x:auto; background:var(--bg);
+    display:flex; gap:4px; padding:12px 12px 0; overflow-x:auto; background:var(--bg);
     border-bottom:1px solid var(--line);
   }
   .tab{
-    border:none; background:transparent; color:var(--muted); font-size:14px; font-weight:700;
-    padding:8px 4px 12px; cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent;
+    border:none; background:transparent; color:var(--muted); font-size:13.5px; font-weight:700;
+    padding:9px 12px 12px; cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent;
+    border-radius:10px 10px 0 0;
   }
-  .tab.active{ color:var(--ink); border-bottom-color:var(--accent); }
+  .tab.active{ color:var(--navy); border-bottom-color:var(--coral); background:var(--surface-2); }
 
   main{ padding:16px; max-width:640px; margin:0 auto 60px; }
   section.panel{ display:none; }
@@ -65,9 +69,9 @@
 
   .card{
     background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    padding:14px; margin-bottom:12px;
+    padding:16px; margin-bottom:12px;
   }
-  .card h3{ margin:0 0 10px; font-size:14.5px; }
+  .card h3{ margin:0 0 10px; font-size:14.5px; font-weight:800; color:var(--navy); }
   .hint{ color:var(--muted); font-size:12.5px; margin:0 0 10px; }
 
   label.field{ display:block; font-size:12.5px; color:var(--muted); margin:0 0 4px; }
@@ -84,11 +88,12 @@
   .row > *{ flex:1; }
 
   button{
-    font:inherit; cursor:pointer; border-radius:10px; border:1px solid transparent;
+    font:inherit; cursor:pointer; border-radius:11px; border:1px solid transparent;
     padding:10px 14px; font-weight:700; font-size:14px;
   }
-  .btn-primary{ background:var(--accent); color:var(--accent-ink); width:100%; }
-  .btn-ghost{ background:transparent; color:var(--accent); border:1px solid var(--accent); }
+  .btn-primary{ background:var(--navy); color:var(--navy-ink); width:100%; }
+  .btn-cta{ background:var(--coral); color:var(--coral-ink); width:100%; padding:14px; font-size:15px; }
+  .btn-ghost{ background:transparent; color:var(--navy); border:1px solid var(--line); }
   .btn-danger{ background:transparent; color:var(--danger); border:1px solid var(--danger); padding:5px 9px; font-size:12px; }
   .btn-small{ padding:6px 10px; font-size:12.5px; }
 
@@ -103,30 +108,50 @@
   .map-wrap{ border-radius:12px; overflow:hidden; border:1px solid var(--line); margin-bottom:12px; }
   .map-wrap img{ display:block; width:100%; height:auto; }
 
+  #legendList{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:2px; }
   .legend-row{
-    display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; gap:10px; padding:10px 12px;
+    background:var(--surface-2); border:1px solid var(--line); border-radius:12px;
+    flex:1 1 150px; min-width:150px; position:relative; overflow:hidden;
   }
-  .legend-row:last-child{ border-bottom:none; }
-  .legend-dot{ width:20px; height:20px; border-radius:50%; flex:none; border:2px solid var(--surface); box-shadow:0 0 0 1px var(--line); }
+  .legend-row::before{
+    content:""; position:absolute; inset-inline-start:0; top:0; bottom:0; width:4px; background:var(--row-color, var(--accent));
+  }
+  .legend-dot{ width:16px; height:16px; border-radius:50%; flex:none; border:2px solid var(--surface); box-shadow:0 0 0 1px var(--line); }
   .legend-text{ flex:1; }
-  .legend-text .rname{ font-weight:700; font-size:14px; }
-  .legend-text .rdesc{ font-size:12px; color:var(--muted); }
-  .legend-count{ font-size:11.5px; color:var(--muted); }
+  .legend-text .rname{ font-weight:800; font-size:14px; color:var(--ink); }
+  .legend-text .rdesc{ font-size:11.5px; color:var(--muted); }
+  .legend-count{ font-size:12px; font-weight:700; color:var(--navy); white-space:nowrap; }
 
+  #studentsList{ counter-reset: student-index; }
   .student-row, .sup-card, .pair-row{
-    display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; gap:8px; padding:9px 0; border-bottom:1px solid var(--line);
   }
   .student-row:last-child, .pair-row:last-child{ border-bottom:none; }
+  .student-row{ counter-increment: student-index; }
+  .student-row::before{
+    content: counter(student-index, decimal-leading-zero);
+    font-size:11.5px; font-weight:700; color:var(--muted); flex:none; width:20px;
+  }
   .student-row .dot, .chip .dot{ width:9px; height:9px; border-radius:50%; flex:none; }
   .student-row .name{ flex:1; font-size:14px; }
-  .region-tag{ font-size:11px; color:var(--muted); }
+  .region-tag{
+    font-size:11px; font-weight:700; color:var(--tag-color, var(--muted));
+    background: color-mix(in srgb, var(--tag-color, var(--muted)) 14%, transparent);
+    padding:3px 9px 3px 8px; border-radius:20px; display:inline-flex; align-items:center; gap:5px;
+  }
+  .region-tag .rdot{ width:7px; height:7px; border-radius:50%; background:var(--tag-color, var(--muted)); flex:none; }
   .region-group-title{ font-size:12.5px; font-weight:700; color:var(--muted); margin:14px 0 2px; display:flex; align-items:center; gap:6px; }
   .region-group-title:first-child{ margin-top:0; }
   .region-group-title .dot{ width:9px; height:9px; border-radius:50%; }
 
   .sup-card{ display:block; border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:12px; }
-  .sup-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-  .sup-head strong{ font-size:13px; color:var(--muted); }
+  .sup-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; }
+  .sup-head strong{
+    font-size:12.5px; font-weight:800; color:var(--navy-ink); background:var(--navy);
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:8px; flex:none;
+  }
 
   .empty{ text-align:center; color:var(--muted); font-size:13px; padding:18px 0; }
 
@@ -427,7 +452,7 @@
       </div>
       <label class="field">وقت بدء المرور</label>
       <input type="text" id="startTime" placeholder="بعد صلاة العصر مباشرة">
-      <button class="btn-primary" id="generateBtn">توليد تقسيم جديد</button>
+      <button class="btn-cta" id="generateBtn">توليد تقسيم جديد</button>
     </div>
 
     <div id="warnings"></div>
@@ -579,6 +604,7 @@
       var count = state.students.filter(function(s){return s.region===r.id;}).length;
       var row = document.createElement('div');
       row.className = 'legend-row';
+      row.style.setProperty('--row-color', r.color);
       var dot = document.createElement('span');
       dot.className = 'legend-dot'; dot.style.background = r.color;
       var text = document.createElement('div');
@@ -649,7 +675,7 @@
         inRegion.forEach(function(st){
           var row = document.createElement('div');
           row.className = 'student-row';
-          row.innerHTML = '<span class="dot" style="background:'+r.color+'"></span><span class="name">'+escapeHtml(st.name)+'</span>';
+          row.innerHTML = '<span class="region-tag" style="--tag-color:'+r.color+'"><span class="rdot"></span>'+escapeHtml(r.name)+'</span><span class="name">'+escapeHtml(st.name)+'</span>';
           var del = document.createElement('button');
           del.className = 'btn-danger'; del.textContent = 'حذف';
           del.addEventListener('click', function(){
@@ -701,7 +727,7 @@
 
       var head = document.createElement('div');
       head.className = 'sup-head';
-      head.innerHTML = '<strong>مشرف '+(idx+1)+'</strong>';
+      head.innerHTML = '<strong>'+String(idx+1).padStart(2,'0')+'</strong><span style="flex:1;font-weight:700;font-size:13.5px;">مشرف '+(idx+1)+'</span>';
       var del = document.createElement('button');
       del.className = 'btn-danger'; del.textContent = 'حذف';
       del.addEventListener('click', function(){
@@ -1282,15 +1308,40 @@
       return;
     }
     var list = state.attendanceStudents.map(function(rec){
-      return { name: rec.name, points: calcPoints(rec) };
+      return {
+        name: rec.name,
+        unexcused: rec.unexcused || 0,
+        excused: rec.excused || 0,
+        late: rec.late || 0,
+        missedLesson: rec.missedLesson || 0,
+        fee: rec.fee || '',
+        points: calcPoints(rec)
+      };
     });
     list.sort(function(a,b){ return b.points - a.points; });
     list.forEach(function(item){
       var row = document.createElement('div');
       row.className = 'points-row' + (item.points >= 5 ? ' flag' : '');
+
+      var top = document.createElement('div');
+      top.className = 'points-row-top';
       var name = document.createElement('span'); name.className = 'pname'; name.textContent = item.name;
       var val = document.createElement('span'); val.className = 'pval'; val.textContent = item.points + ' نقطة';
-      row.appendChild(name); row.appendChild(val);
+      top.appendChild(name); top.appendChild(val);
+      row.appendChild(top);
+
+      var action = actionFor(item.points);
+      var detail = document.createElement('div');
+      detail.className = 'points-detail';
+      detail.innerHTML =
+        '<span>غياب بدون عذر: <b>'+item.unexcused+'</b></span>' +
+        '<span>غياب بعذر: <b>'+item.excused+'</b></span>' +
+        '<span>تأخر: <b>'+item.late+'</b></span>' +
+        '<span>غياب درس: <b>'+item.missedLesson+'</b></span>' +
+        '<span>الرسوم: <b>'+(item.fee ? escapeHtml(item.fee) : 'لم تُسدد') + (item.fee ? ' ر.س' : '') +'</b></span>' +
+        (action !== '-' ? '<span>الإجراء: <b>'+escapeHtml(action)+'</b></span>' : '');
+      row.appendChild(detail);
+
       wrap.appendChild(row);
     });
   }
